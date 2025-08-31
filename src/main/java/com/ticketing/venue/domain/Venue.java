@@ -4,8 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class Venue {
 
 	@Id
@@ -23,8 +25,8 @@ public class Venue {
 	}
 
 	private Venue(String name, String address, int capacity, double lat, double lng, String phone) {
-		if (capacity <= 0)
-			throw new IllegalArgumentException("공연장 수용 인원은 0이상이어야 합니다.");
+		if (capacity < 1)
+			throw new IllegalArgumentException("공연장 수용 인원은 1명 이상이어야 합니다.");
 		this.name = name;
 		this.address = address;
 		this.capacity = capacity;

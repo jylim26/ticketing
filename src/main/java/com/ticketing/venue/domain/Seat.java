@@ -7,10 +7,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.Getter;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(name = "uq_seat_in_section",
 	columnNames = {"section_id", "row_label", "seat_number"}))
+@Getter
 public class Seat {
 
 	@Id
@@ -21,7 +23,7 @@ public class Seat {
 	private Long sectionId;
 
 	@Column(name = "row_label", nullable = false)
-	private String rowLevel;
+	private String rowLabel;
 
 	@Column(name = "seat_number", nullable = false)
 	private Integer seatNumber;
@@ -30,10 +32,10 @@ public class Seat {
 	}
 
 	private Seat(Long sectionId, String rowLabel, Integer seatNumber) {
-		if (seatNumber <= 0)
-			throw new IllegalArgumentException("좌석 번호는 0이상이어야 합니다.");
+		if (seatNumber < 1)
+			throw new IllegalArgumentException("좌석 번호는 1번 이상이어야 합니다.");
 		this.sectionId = sectionId;
-		this.rowLevel = rowLabel;
+		this.rowLabel = rowLabel;
 		this.seatNumber = seatNumber;
 	}
 

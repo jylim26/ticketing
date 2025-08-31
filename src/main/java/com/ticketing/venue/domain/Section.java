@@ -7,10 +7,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.Getter;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(name = "uq_section_venue_name",
 	columnNames = {"venue_id", "name"}))
+@Getter
 public class Section {
 
 	@Id
@@ -27,8 +29,8 @@ public class Section {
 	}
 
 	private Section(Long venueId, String name, int capacity) {
-		if (capacity < 0)
-			throw new IllegalArgumentException("구역의 수용 인원은 0이상이어야 합니다.");
+		if (capacity < 1)
+			throw new IllegalArgumentException("구역의 수용 인원은 1명 이상이어야 합니다.");
 		this.venueId = venueId;
 		this.name = name;
 		this.capacity = capacity;
