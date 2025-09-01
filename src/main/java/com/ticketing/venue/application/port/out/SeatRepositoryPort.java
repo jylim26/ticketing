@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.ticketing.venue.domain.Seat;
 
-public interface SeatRepository {
+public interface SeatRepositoryPort {
 	List<Seat> saveAll(List<Seat> seats);
 
 	boolean existsInSection(Long sectionId, String rowLabel, int seatNumber);

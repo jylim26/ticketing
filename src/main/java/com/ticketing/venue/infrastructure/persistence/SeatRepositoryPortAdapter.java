@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.ticketing.venue.application.port.out.SeatRepository;
+import com.ticketing.venue.application.port.out.SeatRepositoryPort;
 import com.ticketing.venue.domain.Seat;
 import com.ticketing.venue.infrastructure.persistence.jpa.SeatJpaRepository;
 
@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class SeatRepositoryAdapter implements SeatRepository {
+public class SeatRepositoryPortAdapter implements SeatRepositoryPort {
 
 	private final SeatJpaRepository jpa;
 

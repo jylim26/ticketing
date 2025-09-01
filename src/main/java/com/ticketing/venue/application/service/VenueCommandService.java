@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ticketing.venue.application.port.in.VenueCommandUseCase;
 import com.ticketing.venue.application.port.in.dto.CreateVenueCommand;
-import com.ticketing.venue.application.port.out.SeatRepository;
-import com.ticketing.venue.application.port.out.SectionRepository;
-import com.ticketing.venue.application.port.out.VenueRepository;
+import com.ticketing.venue.application.port.out.SeatRepositoryPort;
+import com.ticketing.venue.application.port.out.SectionRepositoryPort;
+import com.ticketing.venue.application.port.out.VenueRepositoryPort;
 import com.ticketing.venue.domain.Seat;
 import com.ticketing.venue.domain.Section;
 import com.ticketing.venue.domain.Venue;
@@ -25,9 +25,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VenueCommandService implements VenueCommandUseCase {
 
-	private final VenueRepository venueRepository;
-	private final SectionRepository sectionRepository;
-	private final SeatRepository seatRepository;
+	private final VenueRepositoryPort venueRepositoryPort;
+	private final SectionRepositoryPort sectionRepositoryPort;
+	private final SeatRepositoryPort seatRepositoryPort;
 
 	@Transactional
 	@Override
@@ -38,16 +38,17 @@ public class VenueCommandService implements VenueCommandUseCase {
 
 		checkSections(sections, venue.getCapacity());
 
-		Venue savedVenue = venueRepository.save(venue);
+		Venue savedVenue = venueRepositoryPort.save(venue);
 
 		for (SectionSpec s : sections) {
 			checkSectionSeatCapacity(s);
 
-			Section savedSection = sectionRepository.save(Section.create(savedVenue.getId(), s.name(), s.capacity()));
+			Section savedSection = sectionRepositoryPort.save(
+				Section.create(savedVenue.getId(), s.name(), s.capacity()));
 
 			List<Seat> toSave = buildSeatsOrThrowOnDuplicates(savedSection.getId(), s.seats());
 			if (!toSave.isEmpty()) {
-				seatRepository.saveAll(toSave);
+				seatRepositoryPort.saveAll(toSave);
 			}
 		}
 

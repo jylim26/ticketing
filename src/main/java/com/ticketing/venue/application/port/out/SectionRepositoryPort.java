@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.ticketing.venue.domain.Section;
 
-public interface SectionRepository {
+public interface SectionRepositoryPort {
 	Section save(Section section);
 
 	List<Section> findByVenueId(Long venueId);

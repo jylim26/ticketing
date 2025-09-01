@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import com.ticketing.venue.application.port.out.VenueRepository;
+import com.ticketing.venue.application.port.out.VenueRepositoryPort;
 import com.ticketing.venue.domain.Venue;
 import com.ticketing.venue.infrastructure.persistence.jpa.VenueJpaRepository;
 
@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class VenueRepositoryAdapter implements VenueRepository {
+public class VenueRepositoryPortAdapter implements VenueRepositoryPort {
 
 	private final VenueJpaRepository jpa;
 
