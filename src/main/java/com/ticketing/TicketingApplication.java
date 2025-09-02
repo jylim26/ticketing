@@ -2,7 +2,9 @@ package com.ticketing;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
+@ConfigurationPropertiesScan(basePackages = "com.ticketing")
 @SpringBootApplication
 public class TicketingApplication {
 

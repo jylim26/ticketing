@@ -1,4 +1,4 @@
-package com.ticketing.user.infrastructure.rest;
+package com.ticketing.auth.infrastructure.oauth;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -11,14 +11,14 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestClient;
 
+import com.ticketing.auth.application.port.out.IdentityProviderPort;
+import com.ticketing.auth.application.port.out.dto.OAuthProfile;
+import com.ticketing.auth.infrastructure.oauth.config.OAuthProperties;
+import com.ticketing.auth.infrastructure.oauth.dto.KakaoTokenResponse;
+import com.ticketing.auth.infrastructure.oauth.dto.KakaoUserResponse;
+import com.ticketing.auth.infrastructure.oauth.error.KakaoApiErrorCode;
 import com.ticketing.shared.error.CustomException;
-import com.ticketing.user.application.port.out.SocialUserProfilePort;
-import com.ticketing.user.application.port.out.dto.OAuthProfile;
-import com.ticketing.user.domain.Provider;
-import com.ticketing.user.infrastructure.rest.config.OAuthProperties;
-import com.ticketing.user.infrastructure.rest.dto.KakaoTokenResponse;
-import com.ticketing.user.infrastructure.rest.dto.KakaoUserResponse;
-import com.ticketing.user.infrastructure.rest.error.KakaoApiErrorCode;
+import com.ticketing.shared.types.AuthProvider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,38 +26,38 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KakaoOAuthProfileAdapter implements SocialUserProfilePort {
+public class KakaoIdentityAdapter implements IdentityProviderPort {
 	private static final String GRANT_TYPE_AUTHORIZATION_CODE = "authorization_code";
 	private static final String AUTHORIZATION_HEADER = "Authorization";
 	private static final String BEARER_PREFIX = "Bearer ";
 
-	private final OAuthProperties oAuthProperties;
+	private final OAuthProperties props;
 	private final RestClient restClient;
 
 	@Override
-	public OAuthProfile fetchUserProfile(String code, String redirectUri) {
+	public OAuthProfile fetchProfile(String code, String redirectUri) {
 		String accessToken = fetchToken(code, redirectUri);
 
 		KakaoUserResponse response = restClient.get()
-			.uri(oAuthProperties.getKakao().getApiUri())
+			.uri(props.kakao().apiUri())
 			.header(AUTHORIZATION_HEADER, BEARER_PREFIX + accessToken)
 			.retrieve()
 			.onStatus(HttpStatusCode::isError, this::handleKakaoError)
 			.body(KakaoUserResponse.class);
 
-		return new OAuthProfile(Provider.KAKAO.name(), response.kakao_account().email(),
+		return new OAuthProfile(AuthProvider.KAKAO, response.kakao_account().email(),
 			response.kakao_account().profile().nickname());
 	}
 
 	private String fetchToken(String code, String redirectUri) {
 		LinkedMultiValueMap<String, String> request = new LinkedMultiValueMap<>();
 		request.add("grant_type", GRANT_TYPE_AUTHORIZATION_CODE);
-		request.add("client_id", oAuthProperties.getKakao().getClientId());
+		request.add("client_id", props.kakao().clientId());
 		request.add("redirect_uri", redirectUri);
 		request.add("code", code);
 
 		KakaoTokenResponse response = restClient.post()
-			.uri(oAuthProperties.getKakao().getTokenUri())
+			.uri(props.kakao().tokenUri())
 			.body(request)
 			.retrieve()
 			.onStatus(HttpStatusCode::isError, this::handleKakaoError)

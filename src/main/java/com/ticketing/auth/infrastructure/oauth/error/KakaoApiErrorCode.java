@@ -1,4 +1,4 @@
-package com.ticketing.user.infrastructure.rest.error;
+package com.ticketing.auth.infrastructure.oauth.error;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

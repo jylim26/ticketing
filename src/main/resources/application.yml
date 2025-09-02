@@ -27,7 +27,9 @@ oauth:
     api-uri: https://kapi.kakao.com/v2/user/me
     redirect-uri: http://localhost:8080/api/v1/auth/kakao/callback
 
-jwt:
-  secret-key: aawodijwaiodjawodijawiojwodjawiojdioawjdoiajdiowas
-  access-token-expiration-seconds: 1800
-  onboarding-token-expiration-seconds: 900
+security:
+  jwt:
+    issuer: ticketing-api
+    secret: aawodijwaiodjawodijawiojwodjawiojdioawjdoiajdiowas
+    accessTtlSeconds: 900
+    refreshTtlSeconds: 1209600
