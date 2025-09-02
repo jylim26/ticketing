@@ -7,5 +7,5 @@ import com.ticketing.user.domain.User;
 public interface LoadUserPort {
 	Optional<User> findById(Long id);
 
-	Optional<User> findByEmail(String email);
+	Optional<Long> findIdByEmail(String email);
 }

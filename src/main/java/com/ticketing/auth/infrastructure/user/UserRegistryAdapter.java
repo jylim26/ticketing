@@ -19,11 +19,11 @@ public class UserRegistryAdapter implements UserRegistryPort {
 
 	@Override
 	public Long registerIfAbsent(String email, AuthProvider provider, String nickname) {
-		return getUserInfoUseCase.findByEmail(email).orElseGet(() -> {
+		return getUserInfoUseCase.findIdByEmail(email).orElseGet(() -> {
 			try {
 				return registerUserUseCase.registerNewUser(email, provider, nickname).id();
 			} catch (DataIntegrityViolationException e) {
-				return getUserInfoUseCase.findByEmail(email).orElseThrow(() -> e);
+				return getUserInfoUseCase.findIdByEmail(email).orElseThrow(() -> e);
 			}
 		});
 	}

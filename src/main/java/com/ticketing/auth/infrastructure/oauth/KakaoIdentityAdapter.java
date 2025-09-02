@@ -35,8 +35,8 @@ public class KakaoIdentityAdapter implements IdentityProviderPort {
 	private final RestClient restClient;
 
 	@Override
-	public OAuthProfile fetchProfile(String code, String redirectUri) {
-		String accessToken = fetchToken(code, redirectUri);
+	public OAuthProfile fetchProfile(String code) {
+		String accessToken = fetchToken(code, props.kakao().redirectUri());
 
 		KakaoUserResponse response = restClient.get()
 			.uri(props.kakao().apiUri())

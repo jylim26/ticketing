@@ -23,8 +23,8 @@ public class UserPersistenceAdapter implements LoadUserPort, SaveUserPort {
 	}
 
 	@Override
-	public Optional<User> findByEmail(String email) {
-		return jpaRepository.findByEmail(email);
+	public Optional<Long> findIdByEmail(String email) {
+		return jpaRepository.findIdByEmail(email);
 	}
 
 	@Override
