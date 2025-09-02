@@ -1,9 +1,11 @@
 package com.ticketing.user.domain;
 
-import java.time.Instant;
+import java.time.Clock;
 
+import com.ticketing.shared.model.BaseTimeEntity;
 import com.ticketing.shared.types.AuthProvider;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -30,20 +32,20 @@ public class User {
 
 	private String nickname;
 
-	private Instant createdAt;
-
-	private Instant updatedAt;
+	@Embedded
+	private BaseTimeEntity baseTimeEntity;
 
 	protected User() {
 	}
 
-	private User(String email, AuthProvider authProvider, String nickname) {
+	private User(String email, AuthProvider authProvider, String nickname, Clock clock) {
 		this.email = email;
 		this.authProvider = authProvider;
 		this.nickname = nickname;
+		this.baseTimeEntity = BaseTimeEntity.now(clock);
 	}
 
-	public static User create(String email, AuthProvider authProvider, String nickname) {
-		return new User(email, authProvider, nickname);
+	public static User create(String email, AuthProvider authProvider, String nickname, Clock clock) {
+		return new User(email, authProvider, nickname, clock);
 	}
 }

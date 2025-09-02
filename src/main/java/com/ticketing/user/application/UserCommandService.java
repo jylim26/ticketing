@@ -1,5 +1,7 @@
 package com.ticketing.user.application;
 
+import java.time.Clock;
+
 import org.springframework.stereotype.Service;
 
 import com.ticketing.shared.types.AuthProvider;
@@ -16,10 +18,11 @@ import lombok.RequiredArgsConstructor;
 class UserCommandService implements UserCommandUseCase, RegisterUserUseCase {
 
 	private final SaveUserPort saveUserPort;
+	private final Clock clock;
 
 	@Override
 	public UserProfileView registerNewUser(String email, AuthProvider provider, String nickname) {
-		User savedUser = saveUserPort.save(User.create(email, provider, nickname));
+		User savedUser = saveUserPort.save(User.create(email, provider, nickname, clock));
 		return new UserProfileView(savedUser.getId(), savedUser.getEmail(), savedUser.getNickname());
 	}
 }
