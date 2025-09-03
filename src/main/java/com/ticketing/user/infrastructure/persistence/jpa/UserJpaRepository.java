@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ticketing.user.domain.User;
+import com.ticketing.user.infrastructure.persistence.jpa.entity.UserEntity;
 
-public interface UserJpaRepository extends JpaRepository<User, Long> {
+public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
 
-	@Query("select u.id from User u where u.email = :email")
+	@Query("select u.id from UserEntity u where u.email = :email")
 	Optional<Long> findIdByEmail(@Param("email") String email);
 }

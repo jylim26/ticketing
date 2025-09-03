@@ -4,12 +4,11 @@ import java.time.Clock;
 
 import org.springframework.stereotype.Service;
 
-import com.ticketing.shared.types.AuthProvider;
 import com.ticketing.user.application.port.in.exposed.RegisterUserUseCase;
 import com.ticketing.user.application.port.in.exposed.dto.UserProfileView;
 import com.ticketing.user.application.port.in.internal.UserCommandUseCase;
-import com.ticketing.user.application.port.out.SaveUserPort;
 import com.ticketing.user.domain.User;
+import com.ticketing.user.domain.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,12 +16,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class UserCommandService implements UserCommandUseCase, RegisterUserUseCase {
 
-	private final SaveUserPort saveUserPort;
+	private final UserRepository userRepository;
 	private final Clock clock;
 
 	@Override
-	public UserProfileView registerNewUser(String email, AuthProvider provider, String nickname) {
-		User savedUser = saveUserPort.save(User.create(email, provider, nickname, clock));
-		return new UserProfileView(savedUser.getId(), savedUser.getEmail(), savedUser.getNickname());
+	public UserProfileView registerNewUser(String email, String nickname) {
+		User newUser = User.create(email, nickname, clock.instant());
+
+		User savedUser = userRepository.save(newUser);
+
+		return new UserProfileView(
+			savedUser.getId().getValue(),
+			savedUser.getEmail().getValue(),
+			savedUser.getNickname()
+		);
 	}
 }

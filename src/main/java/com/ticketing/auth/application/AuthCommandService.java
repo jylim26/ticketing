@@ -23,7 +23,7 @@ public class AuthCommandService implements AuthCommandUseCase {
 	public TokenPairView socialLogin(String code) {
 		OAuthProfile profile = identityProviderPort.fetchProfile(code);
 
-		Long userId = userRegistryPort.registerIfAbsent(profile.email(), profile.provider(), profile.nickname());
+		Long userId = userRegistryPort.registerIfAbsent(profile.email(), profile.nickname());
 
 		return tokenIssuerPort.issueToken(userId);
 	}

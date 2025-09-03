@@ -6,7 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.ticketing.user.application.port.in.exposed.GetUserInfoUseCase;
 import com.ticketing.user.application.port.in.internal.UserQueryUseCase;
-import com.ticketing.user.application.port.out.LoadUserPort;
+import com.ticketing.user.domain.Email;
+import com.ticketing.user.domain.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,10 +15,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class UserQueryService implements UserQueryUseCase, GetUserInfoUseCase {
 
-	private final LoadUserPort loadUserPort;
+	private final UserRepository userRepository;
 
 	@Override
 	public Optional<Long> findIdByEmail(String email) {
-		return loadUserPort.findIdByEmail(email);
+		return userRepository.findIdByEmail(new Email(email));
 	}
 }
