@@ -18,7 +18,6 @@ import com.ticketing.auth.infrastructure.oauth.dto.KakaoTokenResponse;
 import com.ticketing.auth.infrastructure.oauth.dto.KakaoUserResponse;
 import com.ticketing.auth.infrastructure.oauth.error.KakaoApiErrorCode;
 import com.ticketing.shared.error.CustomException;
-import com.ticketing.shared.types.AuthProvider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,8 +44,7 @@ public class KakaoIdentityAdapter implements IdentityProviderPort {
 			.onStatus(HttpStatusCode::isError, this::handleKakaoError)
 			.body(KakaoUserResponse.class);
 
-		return new OAuthProfile(AuthProvider.KAKAO, response.kakao_account().email(),
-			response.kakao_account().profile().nickname());
+		return new OAuthProfile(response.kakao_account().email(), response.kakao_account().profile().nickname());
 	}
 
 	private String fetchToken(String code, String redirectUri) {
